@@ -3,13 +3,12 @@ package com.techjar.vivecraftforge.network.packet;
 import com.techjar.vivecraftforge.Config;
 import com.techjar.vivecraftforge.network.IPacket;
 import com.techjar.vivecraftforge.util.BlockListMode;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -30,16 +29,17 @@ public class PacketClimbing implements IPacket {
 	}
 
 	@Override
-	public void encode(final PacketBuffer buffer) {
+	public void encode(final FriendlyByteBuf buffer) {
 		buffer.writeByte(1); // allow climbey
 		buffer.writeByte(Config.blockListMode.get().ordinal());
 		for (String s : Config.blockList.get()) {
-			buffer.writeString(s);
+            buffer.writeVarInt(s.length());
+			buffer.writeBytes(s.getBytes(StandardCharsets.UTF_8));
 		}
 	}
 
 	@Override
-	public void decode(final PacketBuffer buffer) {
+	public void decode(final FriendlyByteBuf buffer) {
 	}
 
 	@Override
@@ -48,8 +48,8 @@ public class PacketClimbing implements IPacket {
 
 	@Override
 	public void handleServer(final Supplier<NetworkEvent.Context> context) {
-		ServerPlayerEntity player = context.get().getSender();
+		ServerPlayer player = context.get().getSender();
 		player.fallDistance = 0;
-		player.connection.floatingTickCount = 0;
+		player.connection.aboveGroundTickCount = 0;
 	}
 }

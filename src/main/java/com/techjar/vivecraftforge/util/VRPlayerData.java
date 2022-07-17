@@ -1,6 +1,6 @@
 package com.techjar.vivecraftforge.util;
 
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.math.Vector3d;
 
 public class VRPlayerData {
 	public Vector3d offset = new Vector3d(0, 0, 0);
@@ -34,9 +34,9 @@ public class VRPlayerData {
 		}
 
 		public void setPos(Vector3d pos) {
-			posX = pos.getX();
-			posY = pos.getY();
-			posZ = pos.getZ();
+			posX = pos.x;
+			posY = pos.y;
+			posZ = pos.z;
 		}
 
 		public Quaternion getRot() {

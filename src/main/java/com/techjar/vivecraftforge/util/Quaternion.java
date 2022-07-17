@@ -1,7 +1,7 @@
 
 package com.techjar.vivecraftforge.util;
 
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.math.Vector3d;
 
 /**
  *
@@ -164,4 +164,5 @@ public class Quaternion {
 	public String toString() {
 		return "Quaternion{" + "w=" + w + ", x=" + x + ", y=" + y + ", z=" + z + '}';
 	}
+
 }

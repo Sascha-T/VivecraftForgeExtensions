@@ -5,28 +5,26 @@ import com.techjar.vivecraftforge.util.PlayerTracker;
 import com.techjar.vivecraftforge.util.Quaternion;
 import com.techjar.vivecraftforge.util.Util;
 import com.techjar.vivecraftforge.util.VRPlayerData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
 
-public class VREndermanStareGoal extends EndermanEntity.StareGoal {
-	public VREndermanStareGoal(EndermanEntity enderman) {
-		super(enderman);
-	}
+public class VREndermanStareGoal extends LookAtPlayerGoal {
 
-	@Override
-	public boolean shouldExecute() {
-		boolean orig = super.shouldExecute(); // call this always so stuff gets set up
+    public VREndermanStareGoal(Mob p_25520_, Class<? extends LivingEntity> p_25521_, float p_25522_) {
+        super(p_25520_, p_25521_, p_25522_);
+    }
 
-		LivingEntity target = this.enderman.getAttackTarget();
-		if (target instanceof PlayerEntity && PlayerTracker.hasPlayerData((PlayerEntity)target)) {
-			double dist = target.getDistanceSq(this.enderman);
-			return dist <= 256.0D && Util.shouldEndermanAttackVRPlayer(this.enderman, (PlayerEntity)target);
+    @Override
+	public boolean canUse() {
+		boolean orig = super.canUse(); // call this always so stuff gets set up
+
+		LivingEntity target = this.mob.getTarget();
+		if (target instanceof Player && PlayerTracker.hasPlayerData((Player)target)) {
+			double dist = target.distanceToSqr(this.mob);
+			return dist <= 256.0D && Util.shouldEndermanAttackVRPlayer((EnderMan) this.mob, (Player)target);
 		}
 
 		return orig;
@@ -34,10 +32,10 @@ public class VREndermanStareGoal extends EndermanEntity.StareGoal {
 
 	@Override
 	public void tick() {
-		LivingEntity target = this.enderman.getAttackTarget();
-		if (target instanceof PlayerEntity && PlayerTracker.hasPlayerData((PlayerEntity)target)) {
-			VRPlayerData data = PlayerTracker.getPlayerDataAbsolute((PlayerEntity)target);
-			this.enderman.getLookController().setLookPosition(data.head.posX, data.head.posY, data.head.posZ);
+		LivingEntity target = this.mob.getTarget();
+		if (target instanceof Player && PlayerTracker.hasPlayerData((Player)target)) {
+			VRPlayerData data = PlayerTracker.getPlayerDataAbsolute((Player)target);
+			this.mob.getLookControl().setLookAt(data.head.posX, data.head.posY, data.head.posZ);
 		} else {
 			super.tick();
 		}
