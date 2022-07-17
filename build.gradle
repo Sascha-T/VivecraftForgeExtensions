@@ -17,7 +17,7 @@ plugins {
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '17'
 
-version = "1.3.3"
+version = "1.3.4"
 group = "com.techjar.vivecraftforge" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "VivecraftForgeExtensions-${mcversion}"
 
