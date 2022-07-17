@@ -1,9 +1,5 @@
 package com.techjar.vivecraftforge.util;
 
-import net.minecraft.entity.ai.goal.CreeperSwellGoal;
-import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.network.play.ServerPlayNetHandler;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

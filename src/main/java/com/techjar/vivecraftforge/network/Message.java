@@ -3,6 +3,7 @@ package com.techjar.vivecraftforge.network;
 import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -17,11 +18,11 @@ public class Message<T extends IPacket> {
 		return tClass;
 	}
 
-	public final void encode(T packet, ByteBuf buffer) {
+	public final void encode(T packet, FriendlyByteBuf buffer) {
 		packet.encode(buffer);
 	}
 
-	public final T decode(ByteBuf buffer) {
+	public final T decode(FriendlyByteBuf buffer) {
 		T packet;
 		try {
 			packet = tClass.newInstance();
