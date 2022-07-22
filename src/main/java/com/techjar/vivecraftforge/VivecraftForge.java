@@ -16,24 +16,17 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forgespi.language.IModInfo;
-import org.apache.commons.lang3.tuple.Pair;
 import net.minecraftforge.network.NetworkConstants;
-
-import java.util.function.BiPredicate;
-import java.util.function.Supplier;
 
 @Mod("vivecraftforgeextensions")
 public class VivecraftForge {
     public static IModInfo MOD_INFO;
 
-    private boolean a() {
-        return true;
-    }
     public VivecraftForge() {
         MOD_INFO = ModLoadingContext.get().getActiveContainer().getModInfo();
 
-        // @todo fixlater
-        // ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, ()->Pair.of(  (Supplier<String>) ()->NetworkConstants.IGNORESERVERONLY, (BiPredicate<String, Boolean>) (s, b) -> true);
+        // Fixed it lol - 989onan
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // I dunno how to make "safe" not crash, it doesn't make any sense and gives unhelpful errors
         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> serverInit(eventBus));
