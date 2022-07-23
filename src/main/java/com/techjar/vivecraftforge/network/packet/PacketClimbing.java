@@ -1,9 +1,11 @@
 package com.techjar.vivecraftforge.network.packet;
 
 import com.techjar.vivecraftforge.Config;
+
 import com.techjar.vivecraftforge.network.IPacket;
 import com.techjar.vivecraftforge.util.BlockListMode;
-import io.netty.buffer.ByteBuf;
+import com.techjar.vivecraftforge.util.LogHelper;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -50,6 +52,7 @@ public class PacketClimbing implements IPacket {
 	public void handleServer(final Supplier<NetworkEvent.Context> context) {
 		ServerPlayer player = context.get().getSender();
 		player.fallDistance = 0;
+		LogHelper.info("Climbing!!");
 		player.connection.aboveGroundTickCount = 0;
 	}
 }

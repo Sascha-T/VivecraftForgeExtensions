@@ -1,5 +1,7 @@
 package com.techjar.vivecraftforge;
 
+import java.util.function.BiPredicate;
+
 import com.techjar.vivecraftforge.eventhandler.EventHandlerServer;
 import com.techjar.vivecraftforge.network.ChannelHandler;
 import com.techjar.vivecraftforge.util.LogHelper;
@@ -25,8 +27,8 @@ public class VivecraftForge {
     public VivecraftForge() {
         MOD_INFO = ModLoadingContext.get().getActiveContainer().getModInfo();
 
-        // Fixed it lol - 989onan
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+        // Fixed it lol, read the documentation - 989onan
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (BiPredicate<String, Boolean>) (a, b) -> true));
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // I dunno how to make "safe" not crash, it doesn't make any sense and gives unhelpful errors
         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> serverInit(eventBus));

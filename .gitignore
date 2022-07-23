@@ -23,6 +23,7 @@ build
 .gradle
 eclipse
 run
+logs
 
 # other project things
 libs
@@ -38,3 +39,18 @@ generated/
 
 # Misc
 .directory
+LICENSE.txt
+README.txt
+LICENSE.txt
+gradlew.bat
+gradlew
+changelog.txt
+CREDITS.txt
+*.bat
+gradlew.bat
+*.launch
+*.lnk
+eula.txt
+*.bat
+gradlew
+test.txt
