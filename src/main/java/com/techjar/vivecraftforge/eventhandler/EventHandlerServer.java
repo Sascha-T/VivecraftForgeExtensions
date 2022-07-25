@@ -129,7 +129,7 @@ public class EventHandlerServer {
 		DamageSource source = event.getSource();
 		if (source.getDirectEntity() instanceof Arrow && source.getEntity() instanceof Player) {
 			Arrow arrow = (Arrow) source.getDirectEntity();
-			Player attacker = (Player)source.getDirectEntity();
+			Player attacker = (Player)source.getEntity();
 			if (PlayerTracker.hasPlayerData(attacker)) {
 				VRPlayerData data = PlayerTracker.getPlayerData(attacker);
 				boolean headshot = Util.isHeadshot(target, arrow);
@@ -167,7 +167,7 @@ public class EventHandlerServer {
 			}
 		} else if (event.getEntity() instanceof Projectile) {
             Projectile projectile = (Projectile)event.getEntity();
-			if (!(projectile.getOwner() instanceof Player)) // @todo potential error
+			if (!(projectile.getOwner() instanceof Player)) // TODO: This may not cause an error, please test later. pretty sure it won't. - 989onan
 				return;
             Player shooter = (Player)projectile.getOwner();
 			if (!PlayerTracker.hasPlayerData(shooter))
@@ -181,22 +181,24 @@ public class EventHandlerServer {
 			if (arrow && !data.seated && data.bowDraw > 0) {
 				pos = data.getController(0).getPos();
                 Vec3 pos1 = Util.fromVector3d(data.getController(1).getPos());
+                pos1 = pos1.subtract(new Vec3(pos.x, pos.y, pos.z));
                 pos1.subtract(new Vec3(pos.x, pos.y, pos.z));
 				aim = Util.fromVec3(pos1.normalize());
 			}
-
-			pos.add(Util.fromVec3(Util.fromVector3d(aim).scale(0.6)));
+			pos = data.getController(data.activeHand).getPos();
+			//pos.add(Util.fromVec3(Util.fromVector3d(aim).scale(0.6)));
 
 
 			double vel = projectile.getDeltaMovement().length();
-			projectile.setPos(pos.x, pos.y, pos.z);
+			projectile.setPos(pos.x, pos.y+1.2, pos.z);
 			projectile.shoot(aim.x, aim.y, aim.z, (float)vel, 0.0f);
 
 			Vec3 shooterMotion = shooter.getDeltaMovement();
 			projectile.setDeltaMovement(projectile.getDeltaMovement().add(shooterMotion.x, shooter.isOnGround() ? 0.0 : shooterMotion.y, shooterMotion.z));
 
-			LogHelper.debug("Projectile direction: {}", aim);
+			LogHelper.debug("Projectile direction: {}", (""+aim.x+","+aim.y+","+aim.z+")"));
 			LogHelper.debug("Projectile velocity: {}", vel);
+			LogHelper.debug("("+pos.x+", "+pos.y+", "+pos.z+")");
 		} else if (event.getEntity() instanceof Creeper) {
             Creeper creeper = (Creeper)event.getEntity();
 			Util.replaceAIGoal(creeper, creeper.goalSelector, SwellGoal.class, () -> new VRCreeperSwellGoal(creeper));
@@ -229,7 +231,7 @@ public class EventHandlerServer {
 	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		Connection netManager = ((ServerPlayer)event.getPlayer()).connection.getConnection();
-		netManager.channel().pipeline().addBefore("packet_handler", "vr_aim_fix", new AimFixHandler(netManager, (ServerPlayer) event.getPlayer()));
+		netManager.channel().pipeline().addBefore("packet_handler", "vr_aim_fix", new AimFixHandler(netManager));
 	}
 
 	@SubscribeEvent

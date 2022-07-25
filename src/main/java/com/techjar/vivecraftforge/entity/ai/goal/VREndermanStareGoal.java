@@ -1,8 +1,7 @@
 package com.techjar.vivecraftforge.entity.ai.goal;
 
-import com.techjar.vivecraftforge.util.LogHelper;
+
 import com.techjar.vivecraftforge.util.PlayerTracker;
-import com.techjar.vivecraftforge.util.Quaternion;
 import com.techjar.vivecraftforge.util.Util;
 import com.techjar.vivecraftforge.util.VRPlayerData;
 import net.minecraft.world.entity.LivingEntity;
